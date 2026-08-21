@@ -1,23 +1,57 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Baixar Mp3 e Mp4 free</title>
-    <link rel="stylesheet" href="../static/css/style.css">
+    <title>Baixar MP3 e MP4 do YouTube — grátis</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-    <form action="/download" method="POST">
 
-        <h1>Baixar Mp3 e Mp4 Do YT</h1>
-        <label for="url">Link do Video</label>
-        <input type="text" id="url" name="url" placeholder="Cole o link aqui" required>
-        <button type="submit">Baixar</button>
+    <main class="card">
+        <div class="eyebrow">YOUTUBE &rarr; MP3 / MP4</div>
 
-        {% if message%}
-            <p>{{ message }}</p>
-        {% endif %}
-    </form>
-    
+        <h1>Baixe o áudio ou vídeo<br>em segundos.</h1>
+        <p class="subtitle">Cole o link, escolha o formato e pronto.</p>
+
+        <form action="/download" method="POST" class="download-form">
+            <label for="url">Link do vídeo</label>
+            <input
+                type="text"
+                id="url"
+                name="url"
+                placeholder="https://youtube.com/watch?v=..."
+                autocomplete="off"
+                required
+            >
+
+            <button type="submit">
+                <span>Baixar</span>
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M8 2V11M8 11L4.5 7.5M8 11L11.5 7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M2.5 13.5H13.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+            </button>
+
+            {% if message %}
+                <p class="message">{{ message }}</p>
+            {% endif %}
+        </form>
+
+        <div class="waveform" aria-hidden="true">
+            <span></span><span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span><span></span>
+        </div>
+    </main>
+
+    <footer>
+        Uso pessoal apenas — respeite direitos autorais.
+    </footer>
+
 </body>
 </html>
