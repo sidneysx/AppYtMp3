@@ -44,8 +44,9 @@ def download():
         # Não manter o arquivo original
         'keepvideo': False,
 
-        # Local do FFmpeg
-        'ffmpeg_location': r'C:\ffmpeg\bin\ffmpeg.exe',
+        # O yt-dlp localiza o FFmpeg automaticamente pelo PATH do sistema.
+        # Certifique-se de que o FFmpeg está instalado e adicionado ao PATH
+        # (veja instruções no README.md).
 
         # Runtime JavaScript usado para resolver os desafios do YouTube
         'js_runtimes': {
