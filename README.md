@@ -64,8 +64,8 @@ sudo apt update && sudo apt install ffmpeg
 ## Instalação
 
 ```bash
-git clone https://github.com/seu-usuario/BaixarMp3.git
-cd BaixarMp3
+git clone https://github.com/sidneysx/AppYtMp3.git
+cd AppYtMp3
 python -m venv .venv
 ```
 
