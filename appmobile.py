@@ -39,7 +39,11 @@ def download():
         }],
         'outtmpl': os.path.join(session_dir, '%(title)s.%(ext)s'),
         'keepvideo': False,
-        'ffmpeg_location': r'C:\ffmpeg\bin\ffmpeg.exe',
+
+        # O yt-dlp localiza o FFmpeg automaticamente pelo PATH do sistema.
+        # Certifique-se de que o FFmpeg está instalado e adicionado ao PATH
+        # (veja instruções no README.md).
+
         'js_runtimes': {'deno': {}},
         'remote_components': ['ejs:github'],
         'extractor_args': {'youtube': {'player_client': ['android']}},
