@@ -32,11 +32,11 @@
                 <legend>Formato</legend>
                 <div class="format-options">
                     <label>
-                        <input type="radio" name="format" value="mp3" {% if selected_format != 'mp4' %}checked{% endif %}>
+                        <input type="radio" name="format" value="mp3" checked>
                         <span>MP3 · áudio</span>
                     </label>
                     <label>
-                        <input type="radio" name="format" value="mp4" {% if selected_format == 'mp4' %}checked{% endif %}>
+                        <input type="radio" name="format" value="mp4">
                         <span>MP4 · vídeo</span>
                     </label>
                 </div>
@@ -50,9 +50,16 @@
                 </svg>
             </button>
 
-            {% if message %}
-                <p class="message">{{ message }}</p>
-            {% endif %}
+            <div class="progress" hidden>
+                <div class="pie" role="progressbar" aria-label="Progresso do download"
+                     aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div>
+                <div>
+                    <strong class="progress-percent">0%</strong>
+                    <span class="progress-stage"></span>
+                </div>
+            </div>
+
+            <p class="message" role="alert" hidden></p>
         </form>
 
         <div class="waveform" aria-hidden="true">
@@ -66,6 +73,89 @@
     <footer>
         Uso pessoal apenas — respeite direitos autorais.
     </footer>
+
+    <script>
+        const form = document.querySelector('.download-form');
+        const button = form.querySelector('button');
+        const progress = form.querySelector('.progress');
+        const pie = form.querySelector('.pie');
+        const percentText = form.querySelector('.progress-percent');
+        const stageText = form.querySelector('.progress-stage');
+        const message = form.querySelector('.message');
+
+        const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+        function stageLabel(stage, fmt) {
+            return {
+                fila: 'Na fila, aguardando outros downloads…',
+                preparando: 'Buscando o vídeo…',
+                baixando: 'Baixando…',
+                convertendo: fmt === 'mp3' ? 'Convertendo para MP3…' : 'Juntando vídeo e áudio…',
+                pronto: 'Pronto! O arquivo está sendo salvo.',
+            }[stage];
+        }
+
+        function showProgress(stage, percent, fmt) {
+            // A conversão não informa %, então a pizza fica cheia e pulsando
+            if (stage === 'convertendo' || stage === 'pronto') percent = 100;
+            pie.style.setProperty('--p', percent);
+            pie.setAttribute('aria-valuenow', percent);
+            pie.classList.toggle('busy', ['fila', 'preparando', 'convertendo'].includes(stage));
+            percentText.textContent = percent + '%';
+            stageText.textContent = stageLabel(stage, fmt);
+        }
+
+        async function follow(id, fmt) {
+            let failures = 0;
+            while (true) {
+                await sleep(800);
+                const response = await fetch('/progress/' + id).catch(() => null);
+                if (response && response.status === 404) {
+                    throw new Error('O download se perdeu (o servidor pode ter reiniciado). Tente de novo.');
+                }
+                if (!response || !response.ok) {
+                    // Falha passageira (ex: o túnel oscilou): tenta de novo
+                    if (++failures >= 10) throw new Error('Sem conexão com o servidor.');
+                    continue;
+                }
+                failures = 0;
+
+                const job = await response.json();
+                if (job.stage === 'erro') throw new Error(job.error);
+                showProgress(job.stage, job.percent, fmt);
+                if (job.stage === 'pronto') {
+                    window.location.href = '/file/' + id;
+                    return;
+                }
+            }
+        }
+
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const data = new FormData(form);
+            const fmt = data.get('format');
+
+            button.disabled = true;
+            message.hidden = true;
+            showProgress('fila', 0, fmt);
+            progress.hidden = false;
+
+            try {
+                const response = await fetch('/download', { method: 'POST', body: data });
+                const result = await response.json().catch(() => ({}));
+                if (!response.ok || !result.id) {
+                    throw new Error(result.error || 'Não foi possível iniciar o download.');
+                }
+                await follow(result.id, fmt);
+            } catch (error) {
+                progress.hidden = true;
+                message.textContent = error.message;
+                message.hidden = false;
+            } finally {
+                button.disabled = false;
+            }
+        });
+    </script>
 
 </body>
 </html>

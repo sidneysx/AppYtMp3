@@ -169,12 +169,17 @@ button {
     transition: background 0.15s ease, transform 0.1s ease;
 }
 
-button:hover {
+button:hover:not(:disabled) {
     background: #7ff2df;
 }
 
-button:active {
+button:active:not(:disabled) {
     transform: scale(0.98);
+}
+
+button:disabled {
+    opacity: 0.5;
+    cursor: wait;
 }
 
 button:focus-visible,
@@ -186,13 +191,70 @@ input[type="text"]:focus-visible {
 .message {
     margin-top: 18px;
     padding: 12px 14px;
-    background: var(--accent-dim);
-    border: 1px solid #5eead440;
+    background: #f36a6a1a;
+    border: 1px solid #f36a6a40;
     border-radius: 9px;
-    color: var(--accent);
+    color: var(--error);
     font-size: 0.85rem;
     font-weight: 500;
     line-height: 1.4;
+}
+
+.message[hidden],
+.progress[hidden] {
+    display: none;
+}
+
+/* Acompanhamento do download: pizza com a % baixada */
+@property --p {
+    syntax: '<number>';
+    inherits: false;
+    initial-value: 0;
+}
+
+.progress {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-top: 18px;
+    padding: 14px;
+    background: var(--bg);
+    border: 1px solid var(--surface-border);
+    border-radius: 9px;
+}
+
+.pie {
+    flex-shrink: 0;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: conic-gradient(var(--accent) calc(var(--p) * 1%), var(--surface-border) 0);
+    transition: --p 0.5s ease;
+}
+
+/* Etapas sem % (fila, buscando o vídeo, convertendo) */
+.pie.busy {
+    animation: pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    50% { opacity: 0.45; }
+}
+
+.progress-percent {
+    display: block;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    line-height: 1.1;
+}
+
+.progress-stage {
+    display: block;
+    margin-top: 3px;
+    color: var(--text-muted);
+    font-size: 0.85rem;
 }
 
 /* Elemento de assinatura: waveform decorativo */
@@ -233,6 +295,14 @@ footer {
     .waveform span {
         animation: none;
         height: 40%;
+    }
+
+    .pie {
+        transition: none;
+    }
+
+    .pie.busy {
+        animation: none;
     }
 }
 
