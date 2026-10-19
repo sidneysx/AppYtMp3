@@ -28,6 +28,20 @@
                 required
             >
 
+            <fieldset class="format-picker">
+                <legend>Formato</legend>
+                <div class="format-options">
+                    <label>
+                        <input type="radio" name="format" value="mp3" {% if selected_format != 'mp4' %}checked{% endif %}>
+                        <span>MP3 · áudio</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="format" value="mp4" {% if selected_format == 'mp4' %}checked{% endif %}>
+                        <span>MP4 · vídeo</span>
+                    </label>
+                </div>
+            </fieldset>
+
             <button type="submit">
                 <span>Baixar</span>
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">

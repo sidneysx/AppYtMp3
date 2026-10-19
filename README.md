@@ -1,15 +1,8 @@
 # BaixarMp3 🎵
 
-Aplicação web em Flask para baixar áudio do YouTube convertido em MP3, usando `yt-dlp` + `FFmpeg`.
+Aplicação web em Flask para baixar vídeos do YouTube como **MP3** (áudio, 192 kbps) ou **MP4** (vídeo até 1080p), usando `yt-dlp` + `FFmpeg`.
 
-O projeto tem **duas versões** do servidor:
-
-| Arquivo | Comportamento |
-|---|---|
-| `app.py` | Salva o MP3 numa pasta fixa (`downloads/`) **no servidor** |
-| `appmobile.py` | Envia o MP3 direto pro **navegador de quem clicou**, indo pra pasta de Downloads do celular/PC de quem acessa |
-
-> 💡 Se o objetivo é rodar o servidor em um computador e baixar os arquivos em outros dispositivos na mesma rede (celular, notebook, etc), use o **`appmobile.py`**.
+O formato é escolhido na própria página. O arquivo é enviado direto pro **navegador de quem clicou**, indo pra pasta de Downloads do celular/PC de quem acessa. No servidor ele passa só por uma pasta temporária em `downloads/`, que é apagada assim que o envio termina.
 
 ---
 
@@ -64,8 +57,8 @@ sudo apt update && sudo apt install ffmpeg
 ## Instalação
 
 ```bash
-git clone https://github.com/sidneysx/AppYtMp3.git
-cd AppYtMp3
+git clone https://github.com/seu-usuario/BaixarMp3.git
+cd BaixarMp3
 python -m venv .venv
 ```
 
@@ -89,19 +82,11 @@ pip install -r requirements.txt
 
 ## Como rodar
 
-### Versão padrão (salva no servidor)
-
 ```bash
 python app.py
 ```
 
-### Versão para celular/rede local (baixa no dispositivo de quem acessa)
-
-```bash
-python appmobile.py
-```
-
-Ambas sobem o servidor em `http://localhost:5001`.
+O servidor sobe em `http://localhost:5001`.
 
 ---
 
@@ -127,7 +112,7 @@ Ambas sobem o servidor em `http://localhost:5001`.
    http://SEU_IP_LOCAL:5001
    ```
 
-4. Insira a URL do vídeo e clique em baixar — o arquivo MP3 vai direto pra pasta de Downloads **daquele dispositivo** (usando `appmobile.py`).
+4. Insira a URL do vídeo, escolha MP3 ou MP4 e clique em baixar — o arquivo vai direto pra pasta de Downloads **daquele dispositivo**.
 
 > Se o navegador não conseguir acessar, verifique se o Firewall do computador está bloqueando a porta `5001`.
 
@@ -137,13 +122,15 @@ Ambas sobem o servidor em `http://localhost:5001`.
 
 ```
 BaixarMp3/
-├── app.py            # Versão que salva no servidor
-├── appmobile.py       # Versão que baixa no dispositivo do usuário
+├── app.py             # Servidor Flask (MP3 e MP4)
+├── dns_doh.py         # DNS sobre HTTPS quando a rede bloqueia o DNS do YouTube
 ├── requirements.txt
 ├── .gitignore
 ├── .env.example
-├── downloads/          # Criada automaticamente (ignorada pelo git)
+├── downloads/          # Pastas temporárias, criada automaticamente (ignorada pelo git)
 ├── static/
+│   └── css/
+│       └── style.css
 └── templates/
     └── index.html
 ```

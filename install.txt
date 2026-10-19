@@ -1,0 +1,12 @@
+# 1. FFmpeg no PATH do usuário
+[Environment]::SetEnvironmentVariable('Path', [Environment]::GetEnvironmentVariable('Path','User') + ';C:\ffmpeg\bin', 'User')
+
+# 2. Deno
+winget install --id DenoLand.Deno -e
+
+# 3. Recriar o .venv
+cd C:\projetos\BaixarMp3-4
+Remove-Item -Recurse -Force .venv
+python -m venv .venv
+.venv\Scripts\activate
+pip install -r requirements.txt

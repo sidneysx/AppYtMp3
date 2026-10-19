@@ -1,0 +1,16 @@
+# Ambiente virtual
+.venv/
+venv/
+env/
+__pycache__/
+*.pyc
+
+# Downloads (arquivos de mídia não devem ir pro git)
+downloads/
+
+# Variáveis de ambiente
+.env
+
+# Configurações de IDE
+.vscode/
+.idea/
