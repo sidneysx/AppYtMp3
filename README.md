@@ -6,7 +6,20 @@ O formato é escolhido na própria página. O arquivo é enviado direto pro **na
 
 ---
 
-## ⚠️ Pré-requisitos obrigatórios
+## 🐳 Jeito mais fácil: Docker (qualquer sistema)
+
+Só precisa do [Docker](https://docs.docker.com/get-docker/) instalado. Python, FFmpeg e Deno já vêm dentro da imagem.
+
+```bash
+docker build -t appytmp3 .
+docker run --rm -p 5001:5001 appytmp3
+```
+
+Acesse `http://localhost:5001`. Ignore o `http://172.17.x.x:5001` que aparece no terminal: esse é o IP interno do container e não abre no navegador. Se não quiser usar Docker, siga a instalação manual abaixo.
+
+---
+
+## ⚠️ Pré-requisitos obrigatórios (instalação manual)
 
 ### 1. Python 3.10+
 

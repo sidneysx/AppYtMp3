@@ -109,7 +109,8 @@ def run_download(job, url, fmt):
         'noplaylist': True,
         'playlist_items': '1',
         'keepvideo': False,
-        'ffmpeg_location': r'C:\ffmpeg\bin\ffmpeg.exe',
+        # Sem FFMPEG_PATH, o yt-dlp procura o ffmpeg no PATH
+        'ffmpeg_location': os.environ.get('FFMPEG_PATH'),
         # Runtime JavaScript e script solver para os desafios do YouTube
         # (sem eles o download falha com "This video is not available")
         'js_runtimes': {'deno': {}},
